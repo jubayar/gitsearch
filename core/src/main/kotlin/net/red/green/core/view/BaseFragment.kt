@@ -26,7 +26,7 @@ abstract class BaseFragment<VB : ViewDataBinding> : Fragment()  {
 
         initOnCreateView()
 
-        val viewModel = getViewModel<BaseViewModel>()
+        val viewModel = getViewModel()
         viewModel?.showMessage?.observe(viewLifecycleOwner) { msg: String ->
             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
         }
@@ -42,7 +42,7 @@ abstract class BaseFragment<VB : ViewDataBinding> : Fragment()  {
     @LayoutRes
     protected abstract fun layoutId(): Int
 
-    protected abstract fun <T : BaseViewModel> getViewModel(): T?
+    protected abstract fun getViewModel(): BaseViewModel?
 
     protected abstract fun initOnCreateView()
 }

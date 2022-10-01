@@ -11,6 +11,7 @@ import net.red.green.core.BuildConfig
 object NetworkModule {
 
     private val moshi = Moshi.Builder()
+        .add(ThrowableAdapter())
         .build()
 
     private fun provideOkHttpClient(): OkHttpClient {
