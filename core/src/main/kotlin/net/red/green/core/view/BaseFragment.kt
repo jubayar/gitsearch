@@ -5,13 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.LayoutRes
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.viewbinding.ViewBinding
 import net.red.green.core.viewmodel.BaseViewModel
 
-abstract class BaseFragment<VB : ViewDataBinding, T: BaseViewModel> : Fragment()  {
+abstract class BaseFragment<VB : ViewBinding, T: BaseViewModel> : Fragment()  {
     protected val bindingView: VB
         get() = viewDataBinding
     private lateinit var viewDataBinding: VB
@@ -23,7 +21,7 @@ abstract class BaseFragment<VB : ViewDataBinding, T: BaseViewModel> : Fragment()
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewDataBinding = DataBindingUtil.inflate(inflater, layoutId(), container, false)
+        viewDataBinding = constructViewBinding(inflater)
         viewModel = initViewModel()
 
         initOnCreateView()
@@ -35,13 +33,7 @@ abstract class BaseFragment<VB : ViewDataBinding, T: BaseViewModel> : Fragment()
         return viewDataBinding.root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        viewDataBinding.unbind()
-    }
-
-    @LayoutRes
-    protected abstract fun layoutId(): Int
+    protected abstract fun constructViewBinding(inflater: LayoutInflater): VB
 
     protected abstract fun initViewModel(): T
 

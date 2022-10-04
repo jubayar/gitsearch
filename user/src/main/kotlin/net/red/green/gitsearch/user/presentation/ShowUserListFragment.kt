@@ -1,5 +1,6 @@
 package net.red.green.gitsearch.user.presentation
 
+import android.view.LayoutInflater
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import net.red.green.core.view.BaseFragment
@@ -9,7 +10,8 @@ import net.red.green.gitsearch.user.databinding.FragmentShowUserListBinding
 class ShowUserListFragment : BaseFragment<FragmentShowUserListBinding, ShowUserListViewModel>() {
     private val accountAdapter = UserAccountListAdapter()
 
-    override fun layoutId(): Int = R.layout.fragment_show_user_list
+    override fun constructViewBinding(inflater: LayoutInflater) =
+        FragmentShowUserListBinding.inflate(inflater)
 
     override fun initViewModel(): ShowUserListViewModel =
         ViewModelProvider(this)[ShowUserListViewModel::class.java]
