@@ -7,11 +7,18 @@ import net.red.green.gitsearch.user.domain.mapper.GitUsersViewDataMapper
 import net.red.green.gitsearch.user.presentation.model.QueryData
 import net.red.green.gitsearch.user.presentation.model.UserAccountViewData
 
-class GetUserAccounts(private val userRepository: UserRepository) : UseCase<GetUserAccounts.RequestValues, GetUserAccounts.ResponseValue>() {
+class GetUserAccountsUseCase(
+    private val userRepository: UserRepository,
+) : UseCase<GetUserAccountsUseCase.RequestValues, GetUserAccountsUseCase.ResponseValue>() {
 
-    override suspend fun execute(requestValues: RequestValues?, callback: UseCaseCallback<ResponseValue>) {
-
-        when(val result = userRepository.getUserAccountList(requestValues!!.queryData.query, requestValues.queryData.page)) {
+    override suspend fun invoke(
+        requestValues: RequestValues?,
+        callback: UseCaseCallback<ResponseValue>
+    ) {
+        when (val result = userRepository.getUserAccountList(
+            requestValues!!.queryData.query,
+            requestValues.queryData.page
+        )) {
 
             is BaseResponse.Success -> {
                 val accountList = result.body
@@ -19,7 +26,10 @@ class GetUserAccounts(private val userRepository: UserRepository) : UseCase<GetU
                 callback.onSuccessResponse(ResponseValue(accountViewList))
             }
 
-            is BaseResponse.ApiError -> callback.onApiError(result.errorBody.throwable, result.code)
+            is BaseResponse.ApiError -> callback.onApiError(
+                result.errorBody.throwable,
+                result.code
+            )
 
             is BaseResponse.NetworkError -> callback.onNetworkError(result.error)
 
@@ -28,5 +38,5 @@ class GetUserAccounts(private val userRepository: UserRepository) : UseCase<GetU
     }
 
     class RequestValues(val queryData: QueryData) : UseCase.RequestValues
-    class ResponseValue(val userAccounts : List<UserAccountViewData>) : UseCase.ResponseValue
+    class ResponseValue(val userAccounts: List<UserAccountViewData>) : UseCase.ResponseValue
 }
