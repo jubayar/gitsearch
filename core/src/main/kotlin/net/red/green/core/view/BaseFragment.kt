@@ -46,5 +46,4 @@ abstract class BaseFragment<VB : ViewDataBinding, T: BaseViewModel> : Fragment()
     protected abstract fun initViewModel(): T
 
     protected abstract fun initOnCreateView()
-
 }

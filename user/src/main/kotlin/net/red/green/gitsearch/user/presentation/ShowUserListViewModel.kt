@@ -11,9 +11,9 @@ import net.red.green.gitsearch.user.framework.RemoteUserDataSource
 import net.red.green.gitsearch.user.presentation.model.QueryData
 import net.red.green.gitsearch.user.presentation.model.UserAccountViewData
 
-class ShowUserListViewModel : BaseViewModel() {
+class ShowUserListViewModel : BaseViewModel(), UseCase.UseCaseCallback<GetUserAccounts.ResponseValue> {
     private val repo = UserRepository(RemoteUserDataSource())
-    private val getUserAccounts = GetUserAccounts(repo)
+    private val getUserAccountsUseCase = GetUserAccounts(repo)
 
     val listUserAccount = MutableLiveData<List<UserAccountViewData>>()
 
@@ -21,23 +21,23 @@ class ShowUserListViewModel : BaseViewModel() {
         val queryData = GetUserAccounts.RequestValues(QueryData())
 
         viewModelScope.launch {
-            getUserAccounts.execute(queryData, object: UseCase.UseCaseCallback<GetUserAccounts.ResponseValue> {
-                override fun onSuccessResponse(response: GetUserAccounts.ResponseValue) {
-                    listUserAccount.value = response.userAccounts
-                }
-
-                override fun onApiError(throwable: Throwable, code: Int) {
-                    throwable.message
-                }
-
-                override fun onNetworkError(throwable: Throwable) {
-                    throwable.message
-                }
-
-                override fun onUnknownError(throwable: Throwable?) {
-                    throwable?.message
-                }
-            })
+            getUserAccountsUseCase.execute(queryData, this@ShowUserListViewModel)
         }
+    }
+
+    override fun onSuccessResponse(response: GetUserAccounts.ResponseValue, tag: String) {
+        listUserAccount.value = response.userAccounts
+    }
+
+    override fun onApiError(throwable: Throwable, code: Int, tag: String) {
+        throwable.message
+    }
+
+    override fun onNetworkError(throwable: Throwable, tag: String) {
+        throwable.message
+    }
+
+      override fun onUnknownError(throwable: Throwable?, tag: String) {
+        throwable?.message
     }
 }

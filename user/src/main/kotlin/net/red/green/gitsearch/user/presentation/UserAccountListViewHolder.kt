@@ -2,6 +2,8 @@ package net.red.green.gitsearch.user.presentation
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.transform.CircleCropTransformation
 import net.red.green.gitsearch.user.databinding.ItemUserAccountBinding
 import net.red.green.gitsearch.user.presentation.model.UserAccountViewData
 
@@ -13,7 +15,11 @@ sealed class UserAccountListViewHolder(view: View) : RecyclerView.ViewHolder(vie
 
 class GitUsersListItemViewHolder(view: View) : UserAccountListViewHolder(view) {
     override fun bindItem(data: UserAccountViewData) {
-        //Picasso.get().load(data.avatar_url).resize(200, 0).placeholder(R.mipmap.ic_launcher).into(binding.image)
+        binding.image.load(data.avatar_url) {
+            size(200)
+            crossfade(true)
+            transformations(CircleCropTransformation())
+        }
         binding.name.text = data.login
     }
 }

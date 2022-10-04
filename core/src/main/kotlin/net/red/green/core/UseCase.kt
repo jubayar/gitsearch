@@ -13,9 +13,9 @@ abstract class UseCase<Q : UseCase.RequestValues, P : UseCase.ResponseValue> {
     interface ResponseValue
 
     interface UseCaseCallback<R> {
-        fun onSuccessResponse(response: R)
-        fun onApiError(throwable: Throwable, code: Int)
-        fun onNetworkError(throwable: Throwable)
-        fun onUnknownError(throwable: Throwable?)
+        fun onSuccessResponse(response: R, tag: String = String())
+        fun onApiError(throwable: Throwable, code: Int, tag: String = String())
+        fun onNetworkError(throwable: Throwable, tag: String = String())
+        fun onUnknownError(throwable: Throwable?, tag: String = String())
     }
 }
