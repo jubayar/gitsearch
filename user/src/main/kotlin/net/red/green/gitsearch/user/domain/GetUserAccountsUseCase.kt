@@ -1,7 +1,8 @@
 package net.red.green.gitsearch.user.domain
 
-import net.red.green.core.UseCase
+import net.red.green.core.usecase.UseCase
 import net.red.green.core.network.model.BaseResponse
+import net.red.green.core.usecase.ErrorRes
 import net.red.green.gitsearch.user.data.UserRepository
 import net.red.green.gitsearch.user.domain.mapper.GitUsersViewDataMapper
 import net.red.green.gitsearch.user.presentation.model.QueryData
@@ -26,14 +27,17 @@ class GetUserAccountsUseCase(
                 callback.onSuccessResponse(ResponseValue(accountViewList))
             }
 
-            is BaseResponse.ApiError -> callback.onApiError(
-                result.errorBody.throwable,
-                result.code
+            is BaseResponse.ApiError -> callback.onErrorResponse(
+                ErrorRes(code = result.code, errorMsgList = listOf(result.errorBody.throwable.message!!))
             )
 
-            is BaseResponse.NetworkError -> callback.onNetworkError(result.error)
+            is BaseResponse.NetworkError -> callback.onErrorResponse(
+                ErrorRes(errorMsgList = listOf(result.error.message!!))
+            )
 
-            is BaseResponse.UnknownError -> callback.onUnknownError(result.error)
+            is BaseResponse.UnknownError -> callback.onErrorResponse(
+                ErrorRes(errorMsgList = listOf(result.error?.message!!))
+            )
         }
     }
 

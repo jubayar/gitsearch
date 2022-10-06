@@ -1,4 +1,4 @@
-package net.red.green.core
+package net.red.green.core.usecase
 
 abstract class UseCase<Q : UseCase.RequestValues, P : UseCase.ResponseValue> {
     var requestValues: Q? = null
@@ -11,8 +11,6 @@ abstract class UseCase<Q : UseCase.RequestValues, P : UseCase.ResponseValue> {
 
     interface UseCaseCallback<R> {
         fun onSuccessResponse(response: R, tag: String = String())
-        fun onApiError(throwable: Throwable, code: Int, tag: String = String())
-        fun onNetworkError(throwable: Throwable, tag: String = String())
-        fun onUnknownError(throwable: Throwable?, tag: String = String())
+        fun onErrorResponse(errorRes: ErrorRes, tag: String = String())
     }
 }
