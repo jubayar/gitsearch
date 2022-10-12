@@ -1,6 +1,5 @@
 package net.red.green.gitsearch.user.presentation
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,8 +20,6 @@ class ShowUserListViewModel : BaseViewModel() {
     private val repo = UserRepository(RemoteUserDataSource())
     private val getUserAccountsUseCase = GetUserAccountsUseCase(repo)
 
-    val listUserAccount = MutableLiveData<List<UserAccountViewData>>()
-
     fun fetchUserAccountList(query: String, page: Int) {
         _uiState.value = AccountListUiState.Loading(true)
         val queryData = GetUserAccountsUseCase.RequestValues(QueryData())
@@ -30,10 +27,12 @@ class ShowUserListViewModel : BaseViewModel() {
         viewModelScope.launch {
             getUserAccountsUseCase(queryData, object : UseCase.UseCaseCallback<GetUserAccountsUseCase.ResponseValue> {
                 override fun onSuccessResponse(response: GetUserAccountsUseCase.ResponseValue, tag: String) {
+                    _uiState.value = AccountListUiState.Loading(false)
                     _uiState.value = AccountListUiState.Success(response.userAccounts)
                 }
 
                 override fun onErrorResponse(errorRes: ErrorRes, tag: String) {
+                    _uiState.value = AccountListUiState.Loading(false)
                     _uiState.value = AccountListUiState.Error(errorRes)
                 }
             })

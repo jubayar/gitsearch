@@ -1,12 +1,14 @@
 package net.red.green.gitsearch.user.presentation
 
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.red.green.core.view.BaseFragment
 import net.red.green.gitsearch.user.databinding.FragmentShowUserListBinding
@@ -28,7 +30,10 @@ class ShowUserListFragment : BaseFragment<FragmentShowUserListBinding, ShowUserL
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
                     when(state) {
-                        is ShowUserListViewModel.AccountListUiState.Loading -> {}
+                        is ShowUserListViewModel.AccountListUiState.Loading -> {
+                            bindingView.listUserAccount.visibility = if (state.flag) View.GONE else View.VISIBLE
+                            bindingView.emptyPage.visibility = if (state.flag) View.GONE else View.VISIBLE
+                        }
 
                         is ShowUserListViewModel.AccountListUiState.Success -> {
                             accountAdapter.setData(state.accounts)
