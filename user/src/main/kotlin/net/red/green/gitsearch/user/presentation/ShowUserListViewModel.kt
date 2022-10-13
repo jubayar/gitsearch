@@ -1,6 +1,7 @@
 package net.red.green.gitsearch.user.presentation
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -24,7 +25,7 @@ class ShowUserListViewModel : BaseViewModel() {
         _uiState.value = AccountListUiState.Loading(true)
         val queryData = GetUserAccountsUseCase.RequestValues(QueryData())
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             getUserAccountsUseCase(queryData, object : UseCase.UseCaseCallback<GetUserAccountsUseCase.ResponseValue> {
                 override fun onSuccessResponse(response: GetUserAccountsUseCase.ResponseValue, tag: String) {
                     _uiState.value = AccountListUiState.Loading(false)
