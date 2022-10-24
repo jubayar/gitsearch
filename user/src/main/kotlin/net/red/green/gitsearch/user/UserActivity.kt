@@ -1,8 +1,7 @@
-package net.red.green.gitsearch.user.presentation
+package net.red.green.gitsearch.user
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import net.red.green.gitsearch.user.R
 
 class UserActivity : AppCompatActivity() {
 
