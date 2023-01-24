@@ -1,13 +1,10 @@
 package net.red.green.gitsearch.user.presentation
 
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import net.red.green.core.usecase.ErrorRes
 import net.red.green.core.usecase.UseCase
 import net.red.green.core.viewmodel.BaseViewModel
@@ -24,16 +21,21 @@ class ShowUserListViewModel(val getUserAccountsUseCase: GetUserAccountsUseCase) 
     fun fetchUserAccountList(query: String, page: Int) {
         _uiState.value = AccountListUiState.Loading(true)
         val queryData = GetUserAccountsUseCase.RequestValues(QueryData())
-        viewModelScope.launch { getUserAccountsUseCase(queryData, userAccountsUseCaseCallable) }
+
+        executeSuspendedCodeBlock(GetUserAccountsUseCase.useCaseName) {
+            getUserAccountsUseCase(queryData)
+        }
     }
 
-    private val userAccountsUseCaseCallable = object : UseCase.UseCaseCallback<GetUserAccountsUseCase.ResponseValue> {
-        override fun onSuccessResponse(response: GetUserAccountsUseCase.ResponseValue) {
+    override fun onSuccessResponse(useCase: String, response: UseCase.ResponseValue) {
+        if (response is GetUserAccountsUseCase.ResponseValue) {
             _uiState.value = AccountListUiState.Loading(false)
             _uiState.value = AccountListUiState.Success(response.userAccounts)
         }
+    }
 
-        override fun onErrorResponse(errorRes: ErrorRes) {
+    override fun onErrorResponse(useCase: String, errorRes: ErrorRes) {
+        if (useCase == GetUserAccountsUseCase.useCaseName) {
             _uiState.value = AccountListUiState.Loading(false)
             _uiState.value = AccountListUiState.Error(errorRes)
         }
