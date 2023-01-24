@@ -4,7 +4,7 @@ import net.red.green.core.network.NetworkModule
 import net.red.green.core.network.model.BaseResponse
 import net.red.green.core.network.model.GenericResponse
 import net.red.green.gitsearch.user.data.UserDataSource
-import net.red.green.gitsearch.user.domain.UserAccount
+import net.red.green.gitsearch.user.data.UserAccount
 
 class RemoteUserDataSource : UserDataSource {
     private val apiFactory = NetworkModule.provideApiFactory()

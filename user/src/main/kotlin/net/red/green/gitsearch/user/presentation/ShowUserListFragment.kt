@@ -3,25 +3,23 @@ package net.red.green.gitsearch.user.presentation
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.red.green.core.view.BaseFragment
 import net.red.green.gitsearch.user.databinding.FragmentShowUserListBinding
 
 class ShowUserListFragment : BaseFragment<FragmentShowUserListBinding, ShowUserListViewModel>() {
     private val accountAdapter = UserAccountListAdapter()
+    private val showUserListViewModel: ShowUserListViewModel by viewModels { ShowUserListViewModel.Factory }
 
     override fun constructViewBinding(inflater: LayoutInflater) =
         FragmentShowUserListBinding.inflate(inflater)
 
-    override fun initViewModel(): ShowUserListViewModel =
-        ViewModelProvider(this)[ShowUserListViewModel::class.java]
-
+    override fun initViewModel(): ShowUserListViewModel = showUserListViewModel
 
     override fun initOnCreateView() {
         bindingView.listUserAccount.adapter = accountAdapter
@@ -29,10 +27,12 @@ class ShowUserListFragment : BaseFragment<FragmentShowUserListBinding, ShowUserL
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
-                    when(state) {
+                    when (state) {
                         is ShowUserListViewModel.AccountListUiState.Loading -> {
-                            bindingView.listUserAccount.visibility = if (state.flag) View.GONE else View.VISIBLE
-                            bindingView.emptyPage.visibility = if (state.flag) View.GONE else View.VISIBLE
+                            bindingView.listUserAccount.visibility =
+                                if (state.flag) View.GONE else View.VISIBLE
+                            bindingView.emptyPage.visibility =
+                                if (state.flag) View.GONE else View.VISIBLE
                         }
 
                         is ShowUserListViewModel.AccountListUiState.Success -> {
@@ -40,7 +40,11 @@ class ShowUserListFragment : BaseFragment<FragmentShowUserListBinding, ShowUserL
                         }
 
                         is ShowUserListViewModel.AccountListUiState.Error -> {
-                            Toast.makeText(context, state.errorRes.errorMsgList[0], Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                state.errorRes.errorMsgList[0],
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }

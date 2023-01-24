@@ -1,6 +1,6 @@
 package net.red.green.gitsearch.user.domain.mapper
 
-import net.red.green.gitsearch.user.domain.UserAccount
+import net.red.green.gitsearch.user.data.UserAccount
 import net.red.green.gitsearch.user.presentation.model.UserAccountViewData
 
 internal object GitUsersViewDataMapper {

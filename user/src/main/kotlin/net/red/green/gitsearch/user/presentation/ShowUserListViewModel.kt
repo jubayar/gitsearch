@@ -1,6 +1,9 @@
 package net.red.green.gitsearch.user.presentation
 
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,12 +17,9 @@ import net.red.green.gitsearch.user.framework.RemoteUserDataSource
 import net.red.green.gitsearch.user.presentation.model.QueryData
 import net.red.green.gitsearch.user.presentation.model.UserAccountViewData
 
-class ShowUserListViewModel : BaseViewModel() {
+class ShowUserListViewModel(val getUserAccountsUseCase: GetUserAccountsUseCase) : BaseViewModel() {
     private val _uiState = MutableStateFlow<AccountListUiState>(AccountListUiState.Loading(false))
     val uiState: StateFlow<AccountListUiState> = _uiState
-
-    private val repo = UserRepository(RemoteUserDataSource())
-    private val getUserAccountsUseCase = GetUserAccountsUseCase(repo)
 
     fun fetchUserAccountList(query: String, page: Int) {
         _uiState.value = AccountListUiState.Loading(true)
@@ -45,5 +45,17 @@ class ShowUserListViewModel : BaseViewModel() {
         class Success(val accounts: List<UserAccountViewData>) : AccountListUiState()
         class Error(val errorRes: ErrorRes) : AccountListUiState()
     }
-}
 
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val repository = UserRepository(RemoteUserDataSource())
+                val getUserAccountsUseCase = GetUserAccountsUseCase(repository)
+
+                ShowUserListViewModel(
+                    getUserAccountsUseCase = getUserAccountsUseCase
+                )
+            }
+        }
+    }
+}

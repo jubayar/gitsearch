@@ -1,4 +1,4 @@
-package net.red.green.gitsearch.user.domain
+package net.red.green.gitsearch.user.data
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
