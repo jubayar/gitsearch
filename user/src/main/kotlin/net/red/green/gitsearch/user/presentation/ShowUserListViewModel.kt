@@ -24,19 +24,18 @@ class ShowUserListViewModel(val getUserAccountsUseCase: GetUserAccountsUseCase) 
     fun fetchUserAccountList(query: String, page: Int) {
         _uiState.value = AccountListUiState.Loading(true)
         val queryData = GetUserAccountsUseCase.RequestValues(QueryData())
+        viewModelScope.launch { getUserAccountsUseCase(queryData, userAccountsUseCaseCallable) }
+    }
 
-        viewModelScope.launch(Dispatchers.IO) {
-            getUserAccountsUseCase(queryData, object : UseCase.UseCaseCallback<GetUserAccountsUseCase.ResponseValue> {
-                override fun onSuccessResponse(response: GetUserAccountsUseCase.ResponseValue, tag: String) {
-                    _uiState.value = AccountListUiState.Loading(false)
-                    _uiState.value = AccountListUiState.Success(response.userAccounts)
-                }
+    private val userAccountsUseCaseCallable = object : UseCase.UseCaseCallback<GetUserAccountsUseCase.ResponseValue> {
+        override fun onSuccessResponse(response: GetUserAccountsUseCase.ResponseValue) {
+            _uiState.value = AccountListUiState.Loading(false)
+            _uiState.value = AccountListUiState.Success(response.userAccounts)
+        }
 
-                override fun onErrorResponse(errorRes: ErrorRes, tag: String) {
-                    _uiState.value = AccountListUiState.Loading(false)
-                    _uiState.value = AccountListUiState.Error(errorRes)
-                }
-            })
+        override fun onErrorResponse(errorRes: ErrorRes) {
+            _uiState.value = AccountListUiState.Loading(false)
+            _uiState.value = AccountListUiState.Error(errorRes)
         }
     }
 

@@ -9,8 +9,8 @@ abstract class UseCase<Q : UseCase.RequestValues, P : UseCase.ResponseValue> {
     interface RequestValues
     interface ResponseValue
 
-    interface UseCaseCallback<R> {
-        fun onSuccessResponse(response: R, tag: String = String())
-        fun onErrorResponse(errorRes: ErrorRes, tag: String = String())
+    interface UseCaseCallback<ResponseValue> {
+        fun onSuccessResponse(response: ResponseValue)
+        fun onErrorResponse(errorRes: ErrorRes)
     }
 }
