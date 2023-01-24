@@ -53,4 +53,8 @@ class GetUserAccountsUseCase(
 
     class RequestValues(val queryData: QueryData) : UseCase.RequestValues
     class ResponseValue(val userAccounts: List<UserAccountViewData>) : UseCase.ResponseValue
+
+    companion object {
+        val useCaseName = GetUserAccountsUseCase::class.java.simpleName
+    }
 }

@@ -5,8 +5,6 @@ abstract class UseCase<Q : UseCase.RequestValues, P : UseCase.ResponseValue> {
 
     abstract suspend operator fun invoke(requestValues: Q?) : UseCaseResponse<ResponseValue, ErrorRes>
 
-    fun getUseCaseName(): String = UseCase::class.java.simpleName
-
     interface RequestValues
     interface ResponseValue
 }

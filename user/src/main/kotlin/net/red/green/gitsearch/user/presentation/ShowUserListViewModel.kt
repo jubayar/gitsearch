@@ -22,7 +22,7 @@ class ShowUserListViewModel(val getUserAccountsUseCase: GetUserAccountsUseCase) 
         _uiState.value = AccountListUiState.Loading(true)
         val queryData = GetUserAccountsUseCase.RequestValues(QueryData())
 
-        executeSuspendedCodeBlock(getUserAccountsUseCase.getUseCaseName()) {
+        executeSuspendedCodeBlock(GetUserAccountsUseCase.useCaseName) {
             getUserAccountsUseCase(queryData)
         }
     }
@@ -35,7 +35,7 @@ class ShowUserListViewModel(val getUserAccountsUseCase: GetUserAccountsUseCase) 
     }
 
     override fun onErrorResponse(useCase: String, errorRes: ErrorRes) {
-        if (useCase == getUserAccountsUseCase.getUseCaseName()) {
+        if (useCase == GetUserAccountsUseCase.useCaseName) {
             _uiState.value = AccountListUiState.Loading(false)
             _uiState.value = AccountListUiState.Error(errorRes)
         }
