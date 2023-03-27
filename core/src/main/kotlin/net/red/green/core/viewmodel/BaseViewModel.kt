@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.red.green.core.usecase.ErrorRes
 import net.red.green.core.usecase.UseCase
@@ -19,7 +18,7 @@ abstract class BaseViewModel : ViewModel() {
         useCase: String = String(),
         useCaseBlock: suspend () -> UseCaseResponse<UseCase.ResponseValue, ErrorRes>
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             when(val data = useCaseBlock()) {
                 is UseCaseResponse.Success -> {
                     onSuccessResponse(useCase, data.body)
