@@ -1,6 +1,6 @@
 package net.red.green.core.usecase
 
-sealed class UseCaseResponse<out T : Any, out U : Any> {
+sealed class UseCaseResponse<out T : Any, out E : Any> {
 
     data class Success<S: UseCase.ResponseValue>(val body: S): UseCaseResponse<S, Nothing>()
 
