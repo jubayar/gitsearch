@@ -20,7 +20,7 @@ class ShowUserListViewModel(val getUserAccountsUseCase: GetUserAccountsUseCase) 
 
     fun fetchUserAccountList(query: String, page: Int) {
         _uiState.value = AccountListUiState.Loading(true)
-        val queryData = GetUserAccountsUseCase.RequestValues(QueryData())
+        val queryData = GetUserAccountsUseCase.RequestValues(QueryData(query, page))
 
         executeSuspendedCodeBlock(GetUserAccountsUseCase.useCaseName) {
             getUserAccountsUseCase(queryData)

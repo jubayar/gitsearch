@@ -50,6 +50,6 @@ class GetUserAccountsUseCase(
     class ResponseValue(val userAccounts: List<UserAccountViewData>) : UseCase.ResponseValue
 
     companion object {
-        val useCaseName = GetUserAccountsUseCase::class.java.simpleName
+        val useCaseName: String = GetUserAccountsUseCase::class.java.simpleName
     }
 }
