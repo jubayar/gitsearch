@@ -11,7 +11,7 @@ import org.junit.Assert
 import org.junit.Test
 import org.mockito.Mockito
 
-class GetUserAccountsUseCaseTest {
+internal class GetUserAccountsUseCaseTest {
     private val mockUserRepository: UserRepository = Mockito.mock(UserRepository::class.java)
     private val query = "a"
     private val page = 1

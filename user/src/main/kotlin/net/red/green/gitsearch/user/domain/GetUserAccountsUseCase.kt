@@ -14,7 +14,7 @@ import net.red.green.gitsearch.user.presentation.model.UserAccountViewData
 
 class GetUserAccountsUseCase(
     private val userRepository: UserRepository,
-    private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
+    private val defaultDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : UseCase<GetUserAccountsUseCase.RequestValues, GetUserAccountsUseCase.ResponseValue>() {
 
     override suspend fun invoke(

@@ -5,7 +5,7 @@ import net.red.green.gitsearch.user.presentation.model.UserAccountViewData
 import org.junit.Assert
 import org.junit.Test
 
-class GitUsersViewDataMapperTest {
+internal class GitUsersViewDataMapperTest {
     private val userAccounts = listOf<UserAccount>(
         UserAccount(login = "aaa", avatar_url = "avatar_url", url = "url")
     )
