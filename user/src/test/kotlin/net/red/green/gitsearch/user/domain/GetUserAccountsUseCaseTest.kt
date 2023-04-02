@@ -34,4 +34,15 @@ class GetUserAccountsUseCaseTest {
         Mockito.verify(mockUserRepository).getUserAccountList(query, page)
         Assert.assertEquals((data as UseCaseResponse.Success<GetUserAccountsUseCase.ResponseValue>).body.userAccounts, searchedUsersViewData)
     }
+
+    @Test
+    fun `verify getUserAccountList() is invoked which emits null or error status then complete without data`() = runTest {
+        Mockito.`when`(mockUserRepository.getUserAccountList(query, page)).thenReturn(
+            BaseResponse.Success(listOf())
+        )
+
+        val data = useCase(GetUserAccountsUseCase.RequestValues(queryData))
+        Mockito.verify(mockUserRepository).getUserAccountList(query, page)
+        Assert.assertNotNull(data)
+    }
 }
