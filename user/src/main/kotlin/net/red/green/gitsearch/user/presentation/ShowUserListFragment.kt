@@ -35,7 +35,7 @@ class ShowUserListFragment : BaseFragment<FragmentShowUserListBinding, ShowUserL
                             bindingView.listUserAccount.visibility =
                                 if (state.flag) View.GONE else View.VISIBLE
                             bindingView.emptyPage.visibility =
-                                if (!state.flag) View.GONE else View.VISIBLE
+                                if (state.flag) View.GONE else View.VISIBLE
                         }
 
                         is ShowUserListViewModel.AccountListUiState.Success -> {
