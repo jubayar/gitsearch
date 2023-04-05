@@ -1,1 +1,5 @@
-<resources></resources>
+<resources>
+    <string name="app_name">Git Search</string>
+    <string name="search_title">search user...</string>
+    <string name="search_hint">type...</string>
+</resources>

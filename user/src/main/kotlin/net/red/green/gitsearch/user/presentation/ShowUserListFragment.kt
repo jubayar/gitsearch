@@ -3,6 +3,7 @@ package net.red.green.gitsearch.user.presentation
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -10,6 +11,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
 import net.red.green.core.view.BaseFragment
+import net.red.green.gitsearch.user.R
 import net.red.green.gitsearch.user.databinding.FragmentShowUserListBinding
 
 class ShowUserListFragment : BaseFragment<FragmentShowUserListBinding, ShowUserListViewModel>() {
@@ -22,6 +24,7 @@ class ShowUserListFragment : BaseFragment<FragmentShowUserListBinding, ShowUserL
     override fun initViewModel(): ShowUserListViewModel = showUserListViewModel
 
     override fun initOnCreateView() {
+        updateToolbar()
         bindingView.listUserAccount.adapter = accountAdapter
 
         lifecycleScope.launch {
@@ -32,7 +35,7 @@ class ShowUserListFragment : BaseFragment<FragmentShowUserListBinding, ShowUserL
                             bindingView.listUserAccount.visibility =
                                 if (state.flag) View.GONE else View.VISIBLE
                             bindingView.emptyPage.visibility =
-                                if (state.flag) View.GONE else View.VISIBLE
+                                if (!state.flag) View.GONE else View.VISIBLE
                         }
 
                         is ShowUserListViewModel.AccountListUiState.Success -> {
@@ -53,7 +56,23 @@ class ShowUserListFragment : BaseFragment<FragmentShowUserListBinding, ShowUserL
 
         bindingView.listUserAccount.addOnScrollListener(object : RecyclerView.OnScrollListener() {
         })
+    }
 
-        viewModel.fetchUserAccountList("Juba", 0)
+    private fun updateToolbar() {
+        bindingView.searchUserToolbar.inflateMenu(R.menu.user_search_menu_list)
+
+        val searchItem = bindingView.searchUserToolbar.menu.findItem(R.id.search)
+        val searchView = searchItem?.actionView as SearchView
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let { viewModel.fetchUserAccountList(it, 1) }
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
     }
 }
